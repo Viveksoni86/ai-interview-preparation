@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interview Preparation System</title>
+  <meta name="description" content="AI Powered Interview Preparation System with Mock Interviews, Question Repository, RAG Search, and ATS Resume Analyzer.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="cpu"></i>
+        </div>
+        <div class="brand-text">
+          <h1>AI Prep Pro</h1>
+          <span>Interview System</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item active" data-tab="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </li>
+        <li class="nav-item" data-tab="interview">
+          <i data-lucide="mic"></i>
+          <span>Mock Interview</span>
+        </li>
+        <li class="nav-item" data-tab="questions">
+          <i data-lucide="book-open"></i>
+          <span>Question Bank</span>
+        </li>
+        <li class="nav-item" data-tab="ai-chat">
+          <i data-lucide="sparkles"></i>
+          <span>AI Explainer</span>
+        </li>
+        <li class="nav-item" data-tab="rag-search">
+          <i data-lucide="search-code"></i>
+          <span>RAG & Vector Search</span>
+        </li>
+        <li class="nav-item" data-tab="resume">
+          <i data-lucide="file-badge"></i>
+          <span>ATS Resume Analyzer</span>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="backend-status-card">
+          <div class="status-dot" id="backend-status-dot"></div>
+          <div class="status-info">
+            <p>Spring Boot API</p>
+            <span id="backend-status-text">Checking...</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-wrapper">
+      <!-- TOP HEADER -->
+      <header class="top-header">
+        <div class="page-title">
+          <h2 id="page-title-heading">Dashboard Overview</h2>
+          <p id="page-title-sub">Welcome back! Track your interview prep progress and quick actions.</p>
+        </div>
+
+        <div class="header-actions">
+          <div class="model-badge">
+            <i data-lucide="bot"></i>
+            <span>Gemini AI Active</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="checkBackendHealth()">
+            <i data-lucide="refresh-cw"></i> Refresh Status
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT SECTIONS CONTAINER -->
+      <main class="content-area">
+
+        <!-- TAB 1: DASHBOARD OVERVIEW -->
+        <section id="tab-dashboard" class="tab-content active">
+          <!-- Hero Banner -->
+          <div class="hero-banner">
+            <div class="hero-content">
+              <h2>Master Technical Interviews with Gemini AI</h2>
+              <p>Practice live mock interviews, generate tailored technical questions, analyze your resume ATS score, and perform semantic searches on your Java & Spring knowledge base.</p>
+              <div style="display: flex; gap: 12px;">
+                <button class="btn btn-primary" onclick="document.querySelector('[data-tab=\'interview\']').click()">
+                  <i data-lucide="play-circle"></i> Start AI Interview
+                </button>
+                <button class="btn btn-secondary" onclick="document.querySelector('[data-tab=\'resume\']').click()">
+                  <i data-lucide="file-text"></i> Analyze Resume
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass-card stat-card">
+              <div class="stat-icon indigo">
+                <i data-lucide="database"></i>
+              </div>
+              <div class="stat-details">
+                <h4 id="stat-total-questions">0</h4>
+                <span>Questions in Repository</span>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon cyan">
+                <i data-lucide="code"></i>
+              </div>
+              <div class="stat-details">
+                <h4 id="stat-java-questions">0</h4>
+                <span>Java & Spring Prep</span>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon emerald">
+                <i data-lucide="layers"></i>
+              </div>
+              <div class="stat-details">
+                <h4 id="stat-topics-count">8</h4>
+                <span>Supported Tech Topics</span>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon amber">
+                <i data-lucide="zap"></i>
+              </div>
+              <div class="stat-details">
+                <h4>Active</h4>
+                <span>Vector RAG Embeddings</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Grid -->
+          <h3 style="font-family: var(--font-heading); margin-bottom: 16px; font-size: 1.2rem;">Quick Modules</h3>
+          <div class="quick-actions-grid">
+            <div class="glass-card action-card" onclick="document.querySelector('[data-tab=\'interview\']').click()">
+              <div class="action-header">
+                <div class="action-icon"><i data-lucide="mic"></i></div>
+                <i data-lucide="arrow-up-right" style="color: var(--text-muted);"></i>
+              </div>
+              <h3>AI Mock Interview</h3>
+              <p>Simulate real interview questions with instant feedback on topic accuracy and technical structure.</p>
+            </div>
+
+            <div class="glass-card action-card" onclick="document.querySelector('[data-tab=\'questions\']').click()">
+              <div class="action-header">
+                <div class="action-icon"><i data-lucide="book-open"></i></div>
+                <i data-lucide="arrow-up-right" style="color: var(--text-muted);"></i>
+              </div>
+              <h3>Question Repository</h3>
+              <p>Browse, add, filter, and review interview questions across Java, Spring Boot, DSA, and SQL.</p>
+            </div>
+
+            <div class="glass-card action-card" onclick="document.querySelector('[data-tab=\'ai-chat\']').click()">
+              <div class="action-header">
+                <div class="action-icon"><i data-lucide="sparkles"></i></div>
+                <i data-lucide="arrow-up-right" style="color: var(--text-muted);"></i>
+              </div>
+              <h3>Concept Explainer</h3>
+              <p>Get in-depth step-by-step explanations of difficult concepts with code snippets and examples.</p>
+            </div>
+
+            <div class="glass-card action-card" onclick="document.querySelector('[data-tab=\'resume\']').click()">
+              <div class="action-header">
+                <div class="action-icon"><i data-lucide="file-badge"></i></div>
+                <i data-lucide="arrow-up-right" style="color: var(--text-muted);"></i>
+              </div>
+              <h3>ATS Resume Scoring</h3>
+              <p>Upload your resume to get instant ATS scores, missing skill alerts, and readiness suggestions.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: AI MOCK INTERVIEW -->
+        <section id="tab-interview" class="tab-content">
+          <div class="interview-container">
+            <!-- Setup Controls -->
+            <div class="glass-card interview-setup-panel">
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem;">Interview Config</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Configure your session topic and difficulty level.</p>
+              
+              <div class="form-group">
+                <label for="interview-topic-select">Select Topic</label>
+                <select id="interview-topic-select" class="form-select">
+                  <option value="JAVA">JAVA</option>
+                  <option value="SPRING_BOOT" selected>SPRING_BOOT</option>
+                  <option value="HIBERNATE">HIBERNATE</option>
+                  <option value="JDBC">JDBC</option>
+                  <option value="SQL">SQL</option>
+                  <option value="DSA">DSA</option>
+                  <option value="OOPS">OOPS</option>
+                  <option value="HR">HR</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="interview-difficulty-select">Difficulty Level</label>
+                <select id="interview-difficulty-select" class="form-select">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" id="start-interview-btn" onclick="startInterview()" style="width: 100%;">
+                <i data-lucide="play"></i> Start Interview
+              </button>
+
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: var(--radius-md); margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
+                <strong style="color: var(--accent-cyan);">💡 Tip:</strong> Type detailed answers to receive constructive feedback on logic, design patterns, and code clarity.
+              </div>
+            </div>
+
+            <!-- Live Chat Panel -->
+            <div class="glass-card chat-panel" style="padding:0;">
+              <div class="chat-header">
+                <div class="bot-profile">
+                  <div class="bot-avatar"><i data-lucide="bot"></i></div>
+                  <div class="bot-info">
+                    <h4>AI Technical Interviewer</h4>
+                    <span>Online & Ready</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="startInterview()">
+                  <i data-lucide="rotate-ccw"></i> Restart
+                </button>
+              </div>
+
+              <!-- Message Stream -->
+              <div class="chat-messages" id="chat-messages">
+                <div class="message-bubble ai">
+                  Hello! Select your desired topic and difficulty, then click "Start Interview" to begin your session.
+                </div>
+              </div>
+
+              <!-- Input Bar -->
+              <div class="chat-input-area">
+                <textarea id="user-answer-input" class="form-control" placeholder="Type your response here..." disabled></textarea>
+                <button class="btn btn-primary" id="send-answer-btn" onclick="submitAnswer()" disabled>
+                  <i data-lucide="send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: QUESTION BANK -->
+        <section id="tab-questions" class="tab-content">
+          <!-- Filter Controls -->
+          <div class="glass-card filter-bar">
+            <div class="filter-inputs">
+              <input type="text" id="filter-search" class="form-control" placeholder="Search questions..." style="max-width: 240px;">
+              
+              <select id="filter-topic" class="form-select" style="max-width: 180px;">
+                <option value="">All Topics</option>
+                <option value="JAVA">JAVA</option>
+                <option value="SPRING_BOOT">SPRING_BOOT</option>
+                <option value="HIBERNATE">HIBERNATE</option>
+                <option value="JDBC">JDBC</option>
+                <option value="SQL">SQL</option>
+                <option value="DSA">DSA</option>
+                <option value="OOPS">OOPS</option>
+                <option value="HR">HR</option>
+              </select>
+
+              <select id="filter-difficulty" class="form-select" style="max-width: 160px;">
+                <option value="">All Difficulties</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <span class="badge badge-topic" id="question-count-badge">0 Questions</span>
+              <button class="btn btn-primary" onclick="openAddQuestionModal()">
+                <i data-lucide="plus-circle"></i> Add Question
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Cards Container -->
+          <div class="question-list" id="question-list">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- TAB 4: AI EXPLAINER & CHAT -->
+        <section id="tab-ai-chat" class="tab-content">
+          <div class="glass-card">
+            <!-- AI Sub Tabs -->
+            <div class="ai-tabs">
+              <button class="ai-tab-btn active" data-pane="chat">💬 AI Chat Assistant</button>
+              <button class="ai-tab-btn" data-pane="explain">💡 Concept Explainer</button>
+              <button class="ai-tab-btn" data-pane="generate">🎲 Auto Question Generator</button>
+            </div>
+
+            <!-- Pane 1: Chat -->
+            <div id="ai-pane-chat" class="ai-tab-pane">
+              <form onsubmit="handleAIChat(event)">
+                <div class="form-group">
+                  <label for="ai-chat-prompt">Ask Gemini AI anything about interview prep</label>
+                  <textarea id="ai-chat-prompt" class="form-control" placeholder="e.g. What is the difference between HashMap and ConcurrentHashMap in Java?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i data-lucide="send"></i> Ask AI
+                </button>
+              </form>
+              <div class="ai-output-box" id="ai-chat-output">AI answer will appear here...</div>
+            </div>
+
+            <!-- Pane 2: Concept Explainer -->
+            <div id="ai-pane-explain" class="ai-tab-pane" style="display:none;">
+              <form onsubmit="handleAIExplain(event)">
+                <div class="form-group">
+                  <label for="ai-explain-prompt">Concept to Explain Deeply</label>
+                  <input type="text" id="ai-explain-prompt" class="form-control" placeholder="e.g. Spring Boot Bean Lifecycle & Scope Annotations">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i data-lucide="lightbulb"></i> Explain Concept
+                </button>
+              </form>
+              <div class="ai-output-box" id="ai-explain-output">Detailed breakdown will appear here...</div>
+            </div>
+
+            <!-- Pane 3: Question Generator -->
+            <div id="ai-pane-generate" class="ai-tab-pane" style="display:none;">
+              <form onsubmit="handleAIGenerate(event)">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                  <div class="form-group">
+                    <label for="ai-gen-topic">Topic</label>
+                    <select id="ai-gen-topic" class="form-select">
+                      <option value="JAVA">JAVA</option>
+                      <option value="SPRING_BOOT" selected>SPRING_BOOT</option>
+                      <option value="HIBERNATE">HIBERNATE</option>
+                      <option value="DSA">DSA</option>
+                      <option value="SQL">SQL</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="ai-gen-difficulty">Difficulty</label>
+                    <select id="ai-gen-difficulty" class="form-select">
+                      <option value="Easy">Easy</option>
+                      <option value="Medium" selected>Medium</option>
+                      <option value="Hard">Hard</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="ai-gen-count">Number of Questions</label>
+                    <input type="number" id="ai-gen-count" class="form-control" value="3" min="1" max="10">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i data-lucide="sparkles"></i> Generate Questions
+                </button>
+              </form>
+              <div class="ai-output-box" id="ai-gen-output">Generated practice questions will appear here...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 5: RAG & VECTOR SEARCH -->
+        <section id="tab-rag-search" class="tab-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <!-- Semantic Search -->
+            <div class="glass-card">
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">🔍 Semantic Vector Search</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Search concepts by natural language query using PGVector similarity.</p>
+              
+              <form onsubmit="handleSemanticSearch(event)">
+                <div class="form-group">
+                  <label for="semantic-query-input">Query</label>
+                  <input type="text" id="semantic-query-input" class="form-control" placeholder="e.g. How does Spring dependency injection work under the hood?">
+                </div>
+                <div class="form-group">
+                  <label for="semantic-limit-input">Max Results</label>
+                  <input type="number" id="semantic-limit-input" class="form-control" value="5" min="1" max="20">
+                </div>
+                <div style="display: flex; gap: 12px;">
+                  <button type="submit" class="btn btn-primary">
+                    <i data-lucide="search"></i> Vector Search
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="backfill-btn" onclick="backfillEmbeddings()">
+                    <i data-lucide="database"></i> Backfill Embeddings
+                  </button>
+                </div>
+              </form>
+
+              <div class="search-results-list" id="semantic-results-container">
+                <!-- Search Results -->
+              </div>
+            </div>
+
+            <!-- Grounded RAG QA -->
+            <div class="glass-card">
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">🧠 Grounded RAG QA</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Retrieval Augmented Generation backed by retrieved knowledge sources.</p>
+              
+              <form onsubmit="handleRagAsk(event)">
+                <div class="form-group">
+                  <label for="rag-question-input">Question</label>
+                  <input type="text" id="rag-question-input" class="form-control" placeholder="e.g. Explain JPA entity lifecycle states">
+                </div>
+                <div class="form-group">
+                  <label for="rag-limit-input">Context Document Limit</label>
+                  <input type="number" id="rag-limit-input" class="form-control" value="3" min="1" max="10">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i data-lucide="brain"></i> Ask RAG System
+                </button>
+              </form>
+
+              <div class="ai-output-box" id="rag-answer-output" style="margin-top: 20px; min-height: 160px;">
+                RAG answer will appear here...
+              </div>
+              <div id="rag-sources-container"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 6: ATS RESUME ANALYZER -->
+        <section id="tab-resume" class="tab-content">
+          <div class="glass-card">
+            <h3 style="font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 6px;">📄 Upload Resume for ATS & Tech Review</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Upload your PDF or DOCX resume to get an AI-computed ATS Score, strength breakdown, and missing skills report.</p>
+
+            <div class="upload-dropzone" id="resume-upload-dropzone" onclick="document.getElementById('resume-file-input').click()">
+              <i data-lucide="upload-cloud" class="dropzone-icon"></i>
+              <div class="dropzone-text">
+                <h4>Click or Drag & Drop Resume File</h4>
+                <p>Supports PDF, DOCX (Max 10MB)</p>
+              </div>
+              <input type="file" id="resume-file-input" accept=".pdf,.docx,.doc" style="display:none;" onchange="handleResumeFileSelect(event)">
+            </div>
+
+            <!-- Analysis Results Grid -->
+            <div id="resume-results-section" style="display:none;">
+              <div class="resume-results-grid">
+                <!-- Score Card -->
+                <div class="glass-card ats-score-card">
+                  <div class="score-circle" id="ats-score-circle" style="--score-pct: 85;">
+                    <div class="score-inner">
+                      <span id="ats-score-val">85%</span>
+                      <label>ATS Match</label>
+                    </div>
+                  </div>
+                  <h4 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 4px;">Interview Readiness</h4>
+                  <div style="font-size: 0.85rem; color: #cbd5e1; background: rgba(255,255,255,0.04); padding: 10px; border-radius: var(--radius-sm); width: 100%; margin-top: 8px;" id="resume-readiness-box">
+                    Ready for technical interviews.
+                  </div>
+                </div>
+
+                <!-- Breakdown Details -->
+                <div class="resume-details-grid">
+                  <div class="glass-card detail-block">
+                    <h4 style="color: var(--accent-emerald);"><i data-lucide="check-circle-2"></i> Key Strengths</h4>
+                    <ul class="detail-list strengths" id="resume-strengths"></ul>
+                  </div>
+
+                  <div class="glass-card detail-block">
+                    <h4 style="color: var(--accent-amber);"><i data-lucide="alert-triangle"></i> Areas for Growth</h4>
+                    <ul class="detail-list weaknesses" id="resume-weaknesses"></ul>
+                  </div>
+
+                  <div class="glass-card detail-block">
+                    <h4 style="color: var(--accent-rose);"><i data-lucide="x-circle"></i> Missing Skills</h4>
+                    <ul class="detail-list missing" id="resume-missing"></ul>
+                  </div>
+
+                  <div class="glass-card detail-block">
+                    <h4 style="color: var(--accent-cyan);"><i data-lucide="lightbulb"></i> Actionable Suggestions</h4>
+                    <ul class="detail-list suggestions" id="resume-suggestions"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT QUESTION MODAL -->
+  <div class="modal-overlay" id="question-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title">Add New Question</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <form id="question-form">
+        <input type="hidden" id="question-id-input">
+        
+        <div class="form-group">
+          <label for="question-text-input">Question</label>
+          <textarea id="question-text-input" class="form-control" placeholder="e.g. What is the difference between @Component and @Service in Spring?" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="answer-text-input">Solution / Model Answer</label>
+          <textarea id="answer-text-input" class="form-control" placeholder="Provide a detailed technical answer..." required></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label for="topic-select-input">Topic</label>
+            <select id="topic-select-input" class="form-select" required>
+              <option value="JAVA">JAVA</option>
+              <option value="SPRING_BOOT">SPRING_BOOT</option>
+              <option value="HIBERNATE">HIBERNATE</option>
+              <option value="JDBC">JDBC</option>
+              <option value="SQL">SQL</option>
+              <option value="DSA">DSA</option>
+              <option value="OOPS">OOPS</option>
+              <option value="HR">HR</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="difficulty-select-input">Difficulty</label>
+            <select id="difficulty-select-input" class="form-select" required>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-question-btn">Save Question</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Logic JS -->
+  <script src="app.js"></script>
+</body>
+</html>
