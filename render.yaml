@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ai-interview-prep
+    env: docker
+    region: oregon
+    plan: free
+    branch: main
+    envVars:
+      - key: PORT
+        value: 9080
