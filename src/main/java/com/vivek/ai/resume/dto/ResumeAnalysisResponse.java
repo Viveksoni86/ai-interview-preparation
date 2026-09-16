@@ -3,9 +3,12 @@ package com.vivek.ai.resume.dto;
 import lombok.*;
 import java.util.List ;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResumeAnalysisResponse {
 	
 	
